@@ -7,4 +7,5 @@ const DEFAULT_MONGODB_URL =
 module.exports = {
   port: process.env.PORT || 8080,
   db: process.env.MONGODB_URL || DEFAULT_MONGODB_URL,
+  API_PREFIX: "/api/v1",
 };
