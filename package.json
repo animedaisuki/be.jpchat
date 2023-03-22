@@ -17,6 +17,7 @@
     "express-fileupload": "^1.4.0",
     "helmet": "^6.0.1",
     "http-status": "^1.6.2",
+    "mongoose": "^7.0.2",
     "nodemon": "^2.0.21"
   }
 }
