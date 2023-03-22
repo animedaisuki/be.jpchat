@@ -12,6 +12,6 @@ module.exports = () => {
   app.use(cors());
   app.use(express.json());
   app.use(helmet());
-  // app.use(apiRouter);
+  app.use(apiRouter);
   return app;
 };
