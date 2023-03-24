@@ -24,3 +24,6 @@ yarn-error.log*
 
 #fly.io
 fly.toml
+
+#.env
+.env
