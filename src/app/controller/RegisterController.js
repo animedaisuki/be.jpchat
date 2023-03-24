@@ -16,10 +16,10 @@ exports.register = async (req, res) => {
     const isEmailExists = await userModel.findOne({ email: email });
     const isUsernameExists = await userModel.findOne({ username: username });
     if (isEmailExists) {
-      throw new Error("email has already exists");
+      throw new Error("email duplicated");
     }
     if (isUsernameExists) {
-      throw new Error("username has already exists");
+      throw new Error("username duplicated");
     }
 
     const hashedPass = await bcrypt.hash(password, Number(config.secrete));
