@@ -16,18 +16,17 @@ exports.register = async (req, res) => {
     }
 
     const { email, username, password, checked, token } = req.body;
-    const verifyResult = await verify(config.hCaptchaSecret, token);
-
-    if (!verifyResult.success) {
-      return res
-        .status(status.FORBIDDEN)
-        .json({ error: errorHandler.HCAPTCHA_DECLINED });
-    }
 
     if (!checked) {
       return res
         .status(status.FORBIDDEN)
         .json({ error: errorHandler.ILLEGAL_REGISTRATION });
+    }
+
+    if (email === "" || username === "" || password === "") {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.EMPTY_INPUT });
     }
 
     const userModel = User.getModel(req.dbConnetion);
@@ -43,6 +42,14 @@ exports.register = async (req, res) => {
         .status(status.FORBIDDEN)
         .json({ error: errorHandler.USERNAME_DUPLICATION });
     }
+    const verifyResult = await verify(config.hCaptchaSecret, token);
+
+    if (!verifyResult.success) {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.HCAPTCHA_DECLINED });
+    }
+
     const hashedPass = await bcrypt.hash(password, Number(config.secrete));
     const user = new userModel({
       email,
