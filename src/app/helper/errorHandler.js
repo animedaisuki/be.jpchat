@@ -15,4 +15,8 @@ module.exports = {
     desc: "illegal registration",
     explanation: "Please complete hCaptcha verification",
   },
+  EMPTY_INPUT: {
+    desc: "empty input",
+    explanation: "Please complete the required field",
+  },
 };
