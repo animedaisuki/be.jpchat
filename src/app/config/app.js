@@ -9,4 +9,5 @@ module.exports = {
   db: process.env.MONGODB_URL || DEFAULT_MONGODB_URL,
   API_PREFIX: "/api/v1",
   secrete: process.env.SECTRETE,
+  hCaptchaSecret: process.env.HCAPTCHA_SECRET || "123456",
 };

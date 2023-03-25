@@ -11,4 +11,8 @@ module.exports = {
     desc: "illegal registration",
     explanation: "Please read and agree with Doctrina's policy",
   },
+  HCAPTCHA_DECLINED: {
+    desc: "illegal registration",
+    explanation: "Please complete hCaptcha verification",
+  },
 };

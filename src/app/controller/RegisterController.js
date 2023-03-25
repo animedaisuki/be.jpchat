@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const config = require("../config/app");
 const errorHandler = require("../helper/errorHandler");
+const { verify } = require("hcaptcha");
 
 exports.register = async (req, res) => {
   try {
@@ -14,7 +15,14 @@ exports.register = async (req, res) => {
         .json({ error: "validation error" });
     }
 
-    const { email, username, password, checked } = req.body;
+    const { email, username, password, checked, token } = req.body;
+    const verifyResult = await verify(config.hCaptchaSecret, token);
+
+    if (!verifyResult.success) {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.HCAPTCHA_DECLINED });
+    }
 
     if (!checked) {
       return res
