@@ -27,4 +27,5 @@ module.exports = {
     desc: "illegal login",
     explanation: "The email or password is wrong",
   },
+  UNAUTHORIZED: { desc: "unauthorized", explanation: "unauthorized" },
 };
