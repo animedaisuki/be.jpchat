@@ -19,4 +19,12 @@ module.exports = {
     desc: "empty input",
     explanation: "Please complete the required field",
   },
+  USER_NOT_FOUND: {
+    desc: "user not found",
+    explanation: "The username does not exist",
+  },
+  ILLEGAL_LOGIN: {
+    desc: "illegal login",
+    explanation: "The email or password is wrong",
+  },
 };
