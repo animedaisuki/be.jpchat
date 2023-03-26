@@ -10,4 +10,5 @@ module.exports = {
   API_PREFIX: "/api/v1",
   secrete: process.env.SECTRETE,
   hCaptchaSecret: process.env.HCAPTCHA_SECRET || "123456",
+  jwtSecrete: process.env.JWT_ACCESS_SECRET || "123456",
 };
