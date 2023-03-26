@@ -26,6 +26,8 @@ exports.index = async (req, res) => {
   });
 
   const userWithoutPassword = {
+    id: user.id,
+    username: user.username,
     email,
     token,
   };
