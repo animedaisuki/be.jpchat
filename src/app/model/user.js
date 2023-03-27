@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default:
-      "https://s3.console.aws.amazon.com/s3/object/amahane?region=ap-northeast-1&prefix=users/defaultAvatar/poke.JPG",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/poke.JPG",
   },
   isActive: {
     type: Boolean,
