@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  avatar: {
+    type: String,
+    default:
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/poke.JPG",
+  },
   isActive: {
     type: Boolean,
     default: false,

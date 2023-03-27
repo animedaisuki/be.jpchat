@@ -29,6 +29,7 @@ exports.index = async (req, res) => {
     id: user.id,
     username: user.username,
     email,
+    avatar: user.avatar,
     token,
   };
 

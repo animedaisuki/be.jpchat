@@ -24,6 +24,7 @@ exports.auth = async (req, res, next) => {
     req.userId = user.id;
     req.username = user.username;
     req.email = user.email;
+    req.avatar = user.avatar;
     next();
   } catch (error) {
     console.log(error);
