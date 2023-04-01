@@ -17,7 +17,7 @@ router.get("/user/:userId", userController.getUserById);
 router.post("/conversations/add", conversationController.store);
 router.get("/conversations/:userId", conversationController.show);
 
-router.post("/messages/add", messageController.store);
+router.post("/messages/send", messageController.store);
 router.get("/messages/:conversationId", messageController.get);
 
 module.exports = router;
