@@ -11,6 +11,7 @@ router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
 router.post("/login", loginController.index);
 router.post("/user/auto-fetch", authMiddleware.auth, userController.autoFetch);
+router.get("/user/:userId", userController.getUserById);
 
 router.post("/conversations/add", conversationController.store);
 router.get("/conversations/:userId", conversationController.show);
