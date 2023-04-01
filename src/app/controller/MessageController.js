@@ -1,4 +1,5 @@
 const Message = require("../model/message");
+const User = require("../model/user");
 const status = require("http-status");
 
 exports.store = async (req, res) => {
@@ -20,7 +21,13 @@ exports.get = async (req, res) => {
   try {
     const { conversationId } = req.params;
     const messageModel = await Message.getModel(req.dbConnetion);
-    const result = await messageModel.find({ conversation: conversationId });
+    const result = await messageModel
+      .find({ conversation: conversationId })
+      .populate({
+        path: "senderId",
+        model: User.getModel(req.dbConnetion),
+        select: "-password",
+      });
     return res.status(status.OK).json(result);
   } catch (error) {
     console.log(error);
