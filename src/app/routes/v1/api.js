@@ -6,6 +6,7 @@ const loginController = require("../../controller/LoginController");
 const registerController = require("../../controller/RegisterController");
 const userController = require("../../controller/UserController");
 const conversationController = require("../../controller/ConversationController");
+const messageController = require("../../controller/MessageController");
 
 router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
@@ -15,5 +16,8 @@ router.get("/user/:userId", userController.getUserById);
 
 router.post("/conversations/add", conversationController.store);
 router.get("/conversations/:userId", conversationController.show);
+
+router.post("/messages/add", messageController.store);
+router.get("/messages/:conversationId", messageController.get);
 
 module.exports = router;
