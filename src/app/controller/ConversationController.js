@@ -1,5 +1,6 @@
 const status = require("http-status");
 const Conversation = require("../model/conversation");
+const User = require("../model/user");
 const { Types } = require("mongoose");
 
 exports.store = async (req, res) => {
@@ -22,10 +23,15 @@ exports.store = async (req, res) => {
 
 exports.show = async (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   const conversationModel = await Conversation.getModel(req.dbConnetion);
-  const result = await conversationModel.find({
-    members: { $in: [userId] },
-  });
+  const result = await conversationModel
+    .find({
+      members: { $in: [userId] },
+    })
+    .populate({
+      path: "members",
+      model: User.getModel(req.dbConnetion),
+      select: "-password",
+    });
   return res.status(status.OK).json(result);
 };
