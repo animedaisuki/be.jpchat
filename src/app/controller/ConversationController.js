@@ -6,8 +6,8 @@ const { Types } = require("mongoose");
 exports.store = async (req, res) => {
   try {
     const conversationModel = await Conversation.getModel(req.dbConnetion);
-    const userOneId = new Types.ObjectId(req.body.userOne);
-    const userTwoId = new Types.ObjectId(req.body.userTwo);
+    const userOneId = req.body.userOne;
+    const userTwoId = req.body.userTwo;
     const newConversation = new conversationModel({
       members: [userOneId, userTwoId],
     });
