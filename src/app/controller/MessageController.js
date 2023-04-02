@@ -4,15 +4,19 @@ const status = require("http-status");
 
 exports.store = async (req, res) => {
   try {
-    const data = req.body;
+    const { senderId, conversation, text, senderDetail } = req.body;
+    const data = { senderId, conversation, text };
     const messageModel = await Message.getModel(req.dbConnetion);
     const newMessage = new messageModel(data);
     await newMessage.save();
-    const savedMessage = await messageModel.findById(newMessage.id).populate({
-      path: "senderId",
-      model: User.getModel(req.dbConnetion),
-      select: "-password",
-    });
+    // populate will lower the efficiency
+    // const savedMessage = await messageModel.findById(newMessage.id).populate({
+    //   path: "senderId",
+    //   model: User.getModel(req.dbConnetion),
+    //   select: "-password",
+    // });
+    const newMessageObject = newMessage.toObject();
+    const savedMessage = { ...newMessageObject, senderId: senderDetail };
     return res.status(status.OK).json(savedMessage);
   } catch (error) {
     console.log(error);
