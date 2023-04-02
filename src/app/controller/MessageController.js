@@ -8,7 +8,12 @@ exports.store = async (req, res) => {
     const messageModel = await Message.getModel(req.dbConnetion);
     const newMessage = new messageModel(data);
     await newMessage.save();
-    return res.status(status.OK).json(newMessage);
+    const savedMessage = await messageModel.findById(newMessage.id).populate({
+      path: "senderId",
+      model: User.getModel(req.dbConnetion),
+      select: "-password",
+    });
+    return res.status(status.OK).json(savedMessage);
   } catch (error) {
     console.log(error);
     return res
