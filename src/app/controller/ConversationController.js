@@ -22,16 +22,22 @@ exports.store = async (req, res) => {
 };
 
 exports.show = async (req, res) => {
-  const { userId } = req.params;
-  const conversationModel = await Conversation.getModel(req.dbConnetion);
-  const result = await conversationModel
-    .find({
-      members: { $in: [userId] },
-    })
-    .populate({
-      path: "members",
-      model: User.getModel(req.dbConnetion),
-      select: "-password",
-    });
-  return res.status(status.OK).json(result);
+  try {
+    const { userId } = req.params;
+    const conversationModel = await Conversation.getModel(req.dbConnetion);
+    const result = await conversationModel
+      .find({
+        members: { $in: [userId] },
+      })
+      .populate({
+        path: "members",
+        model: User.getModel(req.dbConnetion),
+        select: "-password",
+      });
+    return res.status(status.OK).json(result);
+  } catch (error) {
+    console.log(error);
+    //temporarily send empty objects to frontend
+    return res.status(status.UNPROCESSABLE_ENTITY).json({});
+  }
 };
