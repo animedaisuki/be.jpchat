@@ -51,16 +51,22 @@ exports.register = async (req, res) => {
     }
 
     const defaultAvatars = [
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-gorou-small.png",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-jean-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-ayaka-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-collei-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-kazuha-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-keqing-small.png",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-itto-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-klee-small.png",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-mika-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-kokomi-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-kujou-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-nahida-small.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-shogun-samll.png",
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-yoimiya-small.png",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-eula-small.png",
+      "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-razor-small.png",
     ];
     const randomIndex = Math.floor(Math.random() * defaultAvatars.length);
     const hashedPass = await bcrypt.hash(password, Number(config.secrete));
