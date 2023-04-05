@@ -23,6 +23,11 @@ exports.store = async (req, res) => {
         .json({ error: errorHandler.USER_NOT_FOUND });
     }
     const receiverUserId = receiverUser.id;
+    if (receiverUserId === requestUserId) {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.ILLEGAL_FRIEND_Request });
+    }
 
     //check if a requester already has this friend
     const checkFriendExist = await userModel
@@ -48,7 +53,17 @@ exports.store = async (req, res) => {
     receiverUser.conversations.push(newConversation.id);
     await receiverUser.save();
 
-    return res.status(status.OK).json(newConversation);
+    const populatedNewConversation = await conversationModel
+      .findById(newConversation.id)
+      .populate({
+        path: "members",
+        model: userModel,
+        select: "-password",
+      });
+
+    return res
+      .status(status.OK)
+      .json({ populatedNewConversation, receiverId: receiverUserId });
   } catch (error) {
     console.log(error);
     return res
