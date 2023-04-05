@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Types } = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
@@ -24,9 +25,9 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default:
-        "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/poke.JPG",
     },
+    friends: [{ type: Types.ObjectId, ref: "users" }],
+    conversations: [{ type: Types.ObjectId, ref: "conversations" }],
     isActive: {
       type: Boolean,
       default: false,
