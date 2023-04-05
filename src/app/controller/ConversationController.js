@@ -1,17 +1,53 @@
 const status = require("http-status");
 const Conversation = require("../model/conversation");
 const User = require("../model/user");
-const { Types } = require("mongoose");
+const errorHandler = require("../helper/errorHandler");
 
 exports.store = async (req, res) => {
   try {
     const conversationModel = await Conversation.getModel(req.dbConnetion);
-    const userOneId = req.body.userOne;
-    const userTwoId = req.body.userTwo;
+    const requestUserId = req.userId;
+    const receiverUsername = req.body.receiverUsername;
+
+    const userModel = User.getModel(req.dbConnetion);
+
+    const requestUser = await userModel.findById(requestUserId);
+
+    //check if receiver exists
+    const receiverUser = await userModel.findOne({
+      username: receiverUsername,
+    });
+    if (!receiverUser) {
+      return res
+        .status(status.NOT_FOUND)
+        .json({ error: errorHandler.USER_NOT_FOUND });
+    }
+    const receiverUserId = receiverUser.id;
+
+    //check if a requester already has this friend
+    const checkFriendExist = await userModel
+      .find({ _id: requestUserId, friends: { $in: [receiverUserId] } })
+      .populate({ path: "friends", model: userModel });
+    if (checkFriendExist.length > 0) {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.FRIEND_DUPLICATION });
+    }
+
+    //储存会话
     const newConversation = new conversationModel({
-      members: [userOneId, userTwoId],
+      members: [requestUserId, receiverUserId],
     });
     await newConversation.save();
+
+    //在user schema中储存friend和conversation信息
+    requestUser.friends.push(receiverUserId);
+    requestUser.conversations.push(newConversation.id);
+    await requestUser.save();
+    receiverUser.friends.push(requestUserId);
+    receiverUser.conversations.push(newConversation.id);
+    await receiverUser.save();
+
     return res.status(status.OK).json(newConversation);
   } catch (error) {
     console.log(error);

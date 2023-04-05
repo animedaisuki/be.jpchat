@@ -14,7 +14,11 @@ router.post("/login", loginController.index);
 router.post("/user/auto-fetch", authMiddleware.auth, userController.autoFetch);
 router.get("/user/:userId", userController.getUserById);
 
-router.post("/conversations/add", conversationController.store);
+router.post(
+  "/conversations/add",
+  authMiddleware.auth,
+  conversationController.store
+);
 router.get("/conversations/:userId", conversationController.show);
 
 router.post("/messages/send", messageController.store);

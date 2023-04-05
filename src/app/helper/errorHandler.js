@@ -28,4 +28,8 @@ module.exports = {
     explanation: "The email or password is wrong",
   },
   UNAUTHORIZED: { desc: "unauthorized", explanation: "unauthorized" },
+  FRIEND_DUPLICATION: {
+    desc: "friend duplication",
+    explanation: "the friend has already exits",
+  },
 };
