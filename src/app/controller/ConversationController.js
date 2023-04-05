@@ -26,7 +26,7 @@ exports.store = async (req, res) => {
     if (receiverUserId === requestUserId) {
       return res
         .status(status.FORBIDDEN)
-        .json({ error: errorHandler.ILLEGAL_FRIEND_Request });
+        .json({ error: errorHandler.ILLEGAL_FRIEND_REQUEST });
     }
 
     //check if a requester already has this friend

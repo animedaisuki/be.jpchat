@@ -32,4 +32,8 @@ module.exports = {
     desc: "friend duplication",
     explanation: "the friend has already exits",
   },
+  ILLEGAL_FRIEND_REQUEST: {
+    desc: "illegal friend request",
+    explanation: "illegal friend request",
+  },
 };
