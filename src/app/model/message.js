@@ -6,6 +6,7 @@ const messageSchema = new mongoose.Schema(
     senderId: { type: Types.ObjectId, ref: "users" },
     conversation: { type: Types.ObjectId, ref: "conversations" },
     text: { type: String },
+    isSticker: { type: Boolean },
   },
   { timestamps: true }
 );
