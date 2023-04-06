@@ -4,8 +4,8 @@ const status = require("http-status");
 
 exports.store = async (req, res) => {
   try {
-    const { senderId, conversation, text, senderDetail } = req.body;
-    const data = { senderId, conversation, text };
+    const { senderId, conversation, text, senderDetail, isSticker } = req.body;
+    const data = { senderId, conversation, text, isSticker };
     const messageModel = await Message.getModel(req.dbConnetion);
     const newMessage = new messageModel(data);
     await newMessage.save();
