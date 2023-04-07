@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const config = require("../config/app");
 const errorHandler = require("../helper/errorHandler");
 const { verify } = require("hcaptcha");
+const ChatGptConversation = require("../model/chatGptConversation");
 
 exports.register = async (req, res) => {
   try {
@@ -79,6 +80,16 @@ exports.register = async (req, res) => {
     });
 
     await user.save();
+
+    //add AI as default friend (hard code here)
+    const chatGptConversationModel = await ChatGptConversation.getModel(
+      req.dbConnetion
+    );
+    const newChatGptConversation = new chatGptConversationModel({
+      members: [user.id, "642f6590587a99d158680216"],
+    });
+    await newChatGptConversation.save();
+
     return res
       .status(status.OK)
       .json({ message: "a new account has been created" });
