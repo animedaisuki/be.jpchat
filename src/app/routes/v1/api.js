@@ -7,6 +7,7 @@ const registerController = require("../../controller/RegisterController");
 const userController = require("../../controller/UserController");
 const conversationController = require("../../controller/ConversationController");
 const messageController = require("../../controller/MessageController");
+const chatGptController = require("../../controller/ChatGptController");
 
 router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
@@ -23,5 +24,17 @@ router.get("/conversations/:userId", conversationController.show);
 
 router.post("/messages/send", messageController.store);
 router.get("/messages/:conversationId", messageController.get);
+
+router.post("/openai/chat", authMiddleware.auth, chatGptController.stream);
+router.get(
+  "/openai/chat/fetch/:userId",
+  authMiddleware.auth,
+  chatGptController.show
+);
+router.get(
+  "/openai/chat/fetch-messages/:conversationId",
+  authMiddleware.auth,
+  chatGptController.fetchAIMessages
+);
 
 module.exports = router;
