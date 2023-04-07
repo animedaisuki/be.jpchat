@@ -23,7 +23,16 @@ exports.store = async (req, res) => {
         .json({ error: errorHandler.USER_NOT_FOUND });
     }
     const receiverUserId = receiverUser.id;
+
+    //check if the receiver is the user himself
     if (receiverUserId === requestUserId) {
+      return res
+        .status(status.FORBIDDEN)
+        .json({ error: errorHandler.ILLEGAL_FRIEND_REQUEST });
+    }
+
+    //check if the receiver is AI (hard code)
+    if (receiverUserId === "642f6590587a99d158680216") {
       return res
         .status(status.FORBIDDEN)
         .json({ error: errorHandler.ILLEGAL_FRIEND_REQUEST });
