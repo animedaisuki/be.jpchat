@@ -26,6 +26,8 @@ router.post("/messages/send", messageController.store);
 router.get("/messages/:conversationId", messageController.get);
 
 router.post("/openai/chat", authMiddleware.auth, chatGptController.stream);
+router.get("/openai/chat", chatGptController.listen);
+
 router.get(
   "/openai/chat/fetch/:userId",
   authMiddleware.auth,

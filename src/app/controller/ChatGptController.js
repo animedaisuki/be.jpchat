@@ -5,8 +5,17 @@ const ChatGptConversation = require("../model/chatGptConversation");
 const ChatGptMessage = require("../model/chatGptMessage");
 const User = require("../model/user");
 
+const { EventEmitter } = require("events");
+const messageEventEmitter = new EventEmitter();
+
 exports.stream = async (req, res) => {
   const { text, conversationId } = req.body;
+
+  //hard code
+  const chtholly = await User.getModel(req.dbConnetion)
+    .findById("642f6590587a99d158680216")
+    .select("-password");
+
   try {
     const chatGptMessageModel = await ChatGptMessage.getModel(req.dbConnetion);
     const newChatGptRequestMessage = new chatGptMessageModel({
@@ -29,40 +38,128 @@ exports.stream = async (req, res) => {
       你的名字是珂朵莉·诺塔·瑟尼欧里斯，是一名妖精兵的少女，生活在第六十八号浮岛的妖精仓库，是最强圣剑之一“瑟尼欧里斯”的适合者。
       那么珂朵莉，请以可爱日本动漫女仆的身份和我对话，语气一定要可爱,同时加上“喵”这个语气助词。记住我是你的主人哦，请以ご主人様称呼我。`,
     };
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        roleSetting,
-        {
-          role: "user",
-          content: text,
-        },
-      ],
-    });
-    const responseText = response.data.choices[0].message.content;
+    const response = await openai.createChatCompletion(
+      {
+        model: "gpt-3.5-turbo",
+        messages: [
+          roleSetting,
+          {
+            role: "user",
+            content: text,
+          },
+        ],
+        stream: true,
+      },
+      { responseType: "stream" }
+    );
+
+    // res.writeHead(200, {
+    //   "Content-Type": "text/event-stream",
+    //   "Cache-Control": "no-cache",
+    //   Connection: "keep-alive",
+    // });
+
+    const fetchData = async () => {
+      return new Promise((resolve, reject) => {
+        let responseText = "";
+
+        response.data.on("data", (data) => {
+          const lines = data
+            .toString()
+            .split("\n")
+            .filter((line) => line.trim() !== "");
+          for (const line of lines) {
+            const message = line.replace(/^data: /, "");
+            if (message === "[DONE]") {
+              messageEventEmitter.emit("message", { type: "end" });
+              resolve(responseText); // Stream finished
+              return;
+            }
+            try {
+              const parsed = JSON.parse(message);
+              const resString = parsed.choices[0].delta.content;
+              if (resString) {
+                // console.log(resString);
+                // res.write(`data: ${JSON.stringify(resString)}\n\n`);
+                setTimeout(() => {}, 300);
+                messageEventEmitter.emit("message", {
+                  conversationId,
+                  text: resString,
+                  senderId: chtholly,
+                });
+                responseText += resString;
+              }
+            } catch (error) {
+              console.error(
+                "Could not JSON parse stream message",
+                message,
+                error
+              );
+              reject(error);
+            }
+          }
+        });
+
+        response.data.on("error", (err) => {
+          console.error("Error in data stream", err);
+          reject(err);
+        });
+      });
+    };
+
+    const getFinalResponseText = async () => {
+      const finalResponseText = await fetchData();
+      return finalResponseText;
+    };
+
+    // const responseText = response.data.choices[0].message.content;
+    const finalResponseText = await getFinalResponseText();
+    // res.status(status.OK).json(finalResponseText);
 
     const newChatGptResponseMessage = new chatGptMessageModel({
       //hard code
       senderId: "642f6590587a99d158680216",
       conversation: conversationId,
-      text: responseText,
+      text: finalResponseText,
     });
     await newChatGptResponseMessage.save();
 
-    //hard code
-    const chtholly = await User.getModel(req.dbConnetion)
-      .findById("642f6590587a99d158680216")
-      .select("-password");
-
-    return res
-      .status(status.OK)
-      .json({ conversationId, text: responseText, senderId: chtholly });
+    // return res
+    //   .status(status.OK)
+    //   .json({ conversationId, text: responseText, senderId: chtholly });
+    return res.status(status.OK).json({});
   } catch (error) {
     console.log(error);
     return res
       .status(status.UNPROCESSABLE_ENTITY)
       .json({ error: error.message });
   }
+};
+
+exports.listen = async (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
+  const onMessage = async (message) => {
+    if (message.type) {
+      if (message.type === "end") {
+        res.write(`data: ${JSON.stringify({ type: "end" })}\n\n`);
+        res.end();
+      }
+    } else {
+      res.write(`data: ${JSON.stringify(message)}\n\n`);
+      res.flush();
+    }
+  };
+
+  messageEventEmitter.on("message", onMessage);
+
+  req.on("close", () => {
+    messageEventEmitter.removeListener("message", onMessage);
+  });
 };
 
 exports.show = async (req, res) => {
