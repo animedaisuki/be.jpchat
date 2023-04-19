@@ -23,6 +23,7 @@
     "helmet": "^6.0.1",
     "http-status": "^1.6.2",
     "jsonwebtoken": "^9.0.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.27.0",
     "mongoose": "^7.0.2",
     "nodemon": "^2.0.21",
     "openai": "^3.2.1"
