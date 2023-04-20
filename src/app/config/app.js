@@ -12,4 +12,6 @@ module.exports = {
   hCaptchaSecret: process.env.HCAPTCHA_SECRET || "123456",
   jwtSecrete: process.env.JWT_ACCESS_SECRET || "123456",
   open_ai_key: process.env.OPENAI_API_KEY || "",
+  subscription_key: process.env.SUBSCRIPTION_KEY || "",
+  service_region: process.env.SERVICE_REGION || "",
 };
