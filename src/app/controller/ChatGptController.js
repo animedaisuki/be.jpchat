@@ -150,13 +150,16 @@ exports.fetchAIMessages = async (req, res) => {
   try {
     const { conversationId } = req.params;
     const chatGptMessageModel = await ChatGptMessage.getModel(req.dbConnetion);
-    const result = await chatGptMessageModel
+    let result = await chatGptMessageModel
       .find({ conversation: conversationId })
       .populate({
         path: "senderId",
         model: User.getModel(req.dbConnetion),
         select: "-password",
-      });
+      })
+      .sort({ createdAt: -1 })
+      .limit(250);
+    result = result.reverse();
     return res.status(status.OK).json(result);
   } catch (error) {
     console.log(error);
