@@ -3,7 +3,7 @@ const speechSDK = require("microsoft-cognitiveservices-speech-sdk");
 const config = require("../config/app");
 
 exports.speak = async (req, res) => {
-  const { text } = req.body;
+  const { text, user } = req.body;
   const subscriptionKey = config.subscription_key;
   const region = config.service_region;
   const speechConfig = speechSDK.SpeechConfig.fromSubscription(
@@ -11,8 +11,11 @@ exports.speak = async (req, res) => {
     region
   );
   speechConfig.speechSynthesisLanguage = "ja-JP";
-  // speechConfig.speechSynthesisVoiceName = "zh-CN-XiaoyouNeural";
   speechConfig.speechSynthesisVoiceName = "ja-JP-AoiNeural";
+  if (user.voicePreference === "CN") {
+    speechConfig.speechSynthesisLanguage = "zh-CN";
+    speechConfig.speechSynthesisVoiceName = "zh-CN-XiaoyouNeural";
+  }
 
   const synthesizer = new speechSDK.SpeechSynthesizer(speechConfig, undefined);
   // synthesizer.speakTextAsync(
