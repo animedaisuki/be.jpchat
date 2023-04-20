@@ -31,6 +31,7 @@ exports.auth = async (req, res, next) => {
     req.username = user.username;
     req.email = user.email;
     req.avatar = user.avatar;
+    req.voicePreference = user.voicePreference;
     next();
   } catch (error) {
     console.log(error);

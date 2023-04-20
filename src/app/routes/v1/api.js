@@ -15,6 +15,7 @@ router.post("/register", registerController.register);
 router.post("/login", loginController.index);
 router.post("/user/auto-fetch", authMiddleware.auth, userController.autoFetch);
 router.get("/user/:userId", userController.getUserById);
+router.post("/user/voice-preference", userController.changeVoicePreference);
 
 router.post(
   "/conversations/add",
