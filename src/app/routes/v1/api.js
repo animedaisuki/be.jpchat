@@ -8,6 +8,7 @@ const userController = require("../../controller/UserController");
 const conversationController = require("../../controller/ConversationController");
 const messageController = require("../../controller/MessageController");
 const chatGptController = require("../../controller/ChatGptController");
+const ttsController = require("../../controller/TTSController");
 
 router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
@@ -36,5 +37,7 @@ router.get(
   authMiddleware.auth,
   chatGptController.fetchAIMessages
 );
+
+router.post("/tts/speak", ttsController.speak);
 
 module.exports = router;
