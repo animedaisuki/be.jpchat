@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    voicePreference: {
+      type: String,
+      default: "CN",
+    },
   },
   { timestamps: true }
 );

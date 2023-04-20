@@ -4,9 +4,11 @@ const status = require("http-status");
 const ChatGptConversation = require("../model/chatGptConversation");
 const ChatGptMessage = require("../model/chatGptMessage");
 const User = require("../model/user");
+const speechSDK = require("microsoft-cognitiveservices-speech-sdk");
 
 exports.stream = async (req, res) => {
   const { text, conversationId } = req.body;
+
   try {
     const chatGptMessageModel = await ChatGptMessage.getModel(req.dbConnetion);
     const newChatGptRequestMessage = new chatGptMessageModel({
@@ -54,9 +56,42 @@ exports.stream = async (req, res) => {
       .findById("642f6590587a99d158680216")
       .select("-password");
 
-    return res
-      .status(status.OK)
-      .json({ conversationId, text: responseText, senderId: chtholly });
+    const subscriptionKey = config.subscription_key;
+    const region = config.service_region;
+    const speechConfig = speechSDK.SpeechConfig.fromSubscription(
+      subscriptionKey,
+      region
+    );
+    speechConfig.speechSynthesisLanguage = "ja-JP";
+    speechConfig.speechSynthesisVoiceName = "ja-JP-AoiNeural";
+    const synthesizer = new speechSDK.SpeechSynthesizer(
+      speechConfig,
+      undefined
+    );
+
+    const audioData = await new Promise((resolve, reject) => {
+      synthesizer.speakTextAsync(
+        responseText,
+        (result) => {
+          if (result) {
+            // console.log(result.audioData);
+            // console.log(result.audioDuration);
+            resolve(result.audioData);
+          } else {
+            reject(new Error("No audio data received."));
+          }
+        },
+        (error) => reject(error)
+      );
+    });
+    synthesizer.close();
+
+    return res.status(status.OK).json({
+      conversationId,
+      text: responseText,
+      senderId: chtholly,
+      audioData: Buffer.from(audioData),
+    });
   } catch (error) {
     console.log(error);
     return res
