@@ -31,6 +31,7 @@ exports.index = async (req, res) => {
     email,
     avatar: user.avatar,
     token,
+    voicePreference: user.voicePreference,
   };
 
   return res.status(status.OK).json(userWithoutPassword);
