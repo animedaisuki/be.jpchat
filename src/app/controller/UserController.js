@@ -60,6 +60,7 @@ exports.changePreview = async (req, res) => {
     await user.save();
     return res.status(status.OK).json({ primaryColor, accentColor, aboutMe });
   } catch (error) {
+    console.log(error);
     return res
       .status(status.UNPROCESSABLE_ENTITY)
       .json({ error: error.message });
