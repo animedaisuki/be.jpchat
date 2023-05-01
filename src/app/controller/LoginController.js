@@ -21,6 +21,22 @@ exports.index = async (req, res) => {
       .json({ error: errorHandler.ILLEGAL_LOGIN });
   }
 
+  //check if user has preferred color
+  if (!user.primaryColor) {
+    user.primaryColor = "#389e38";
+    await user.save();
+  }
+  if (!user.accentColor) {
+    user.accentColor = "#1a457f";
+    await user.save();
+  }
+
+  //check if user has about me
+  if (!user.aboutMe) {
+    user.aboutMe = "";
+    await user.save();
+  }
+
   const token = jwt.sign({ id: user.id }, config.jwtSecrete, {
     expiresIn: "72h",
   });
