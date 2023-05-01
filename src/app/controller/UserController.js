@@ -48,3 +48,20 @@ exports.changeVoicePreference = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
+exports.changePreview = async (req, res) => {
+  try {
+    const { primaryColor, accentColor, aboutMe } = req.body;
+    const userModel = await User.getModel(req.dbConnetion);
+    const user = await userModel.findById(req.userId);
+    user.primaryColor = primaryColor;
+    user.accentColor = accentColor;
+    user.aboutMe = aboutMe;
+    await user.save();
+    return res.status(status.OK).json({ primaryColor, accentColor, aboutMe });
+  } catch (error) {
+    return res
+      .status(status.UNPROCESSABLE_ENTITY)
+      .json({ error: error.message });
+  }
+};
