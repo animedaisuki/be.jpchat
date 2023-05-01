@@ -9,6 +9,8 @@ const conversationController = require("../../controller/ConversationController"
 const messageController = require("../../controller/MessageController");
 const chatGptController = require("../../controller/ChatGptController");
 const ttsController = require("../../controller/TTSController");
+const UploadController = require("../../controller/UploadController");
+const { uploadAvatarMiddleWare } = require("../../services/upload");
 
 router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
@@ -20,6 +22,13 @@ router.post(
   "/user/change-preview",
   authMiddleware.auth,
   userController.changePreview
+);
+
+router.post(
+  "/upload/avatar",
+  authMiddleware.auth,
+  uploadAvatarMiddleWare.single("avatar"),
+  UploadController.uploadAvatar
 );
 
 router.post(

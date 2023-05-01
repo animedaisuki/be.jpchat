@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.321.1",
+    "@aws-sdk/lib-storage": "^3.321.1",
+    "@aws-sdk/s3-request-presigner": "^3.321.1",
     "aws-sdk": "^2.1342.0",
     "base64-js": "^1.5.1",
     "bcrypt": "^5.1.0",
@@ -26,7 +29,10 @@
     "jsonwebtoken": "^9.0.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.27.0",
     "mongoose": "^7.0.2",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
     "nodemon": "^2.0.21",
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "uuid": "^9.0.0"
   }
 }
