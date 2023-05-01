@@ -48,6 +48,9 @@ exports.index = async (req, res) => {
     avatar: user.avatar,
     token,
     voicePreference: user.voicePreference,
+    primaryColor: user.primaryColor,
+    accentColor: user.accentColor,
+    aboutMe: user.aboutMe,
   };
 
   return res.status(status.OK).json(userWithoutPassword);
