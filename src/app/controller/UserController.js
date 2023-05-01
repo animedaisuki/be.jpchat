@@ -8,6 +8,9 @@ exports.autoFetch = async (req, res) => {
     email: req.email,
     avatar: req.avatar,
     voicePreference: req.voicePreference,
+    primaryColor: req.primaryColor,
+    accentColor: req.accentColor,
+    aboutMe: req.aboutMe,
   };
   return res.status(status.OK).json(userWithoutPassword);
 };
