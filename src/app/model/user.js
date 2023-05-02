@@ -36,6 +36,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "CN",
     },
+    primaryColor: {
+      type: String,
+      default: "#389e38",
+    },
+    accentColor: {
+      type: String,
+      default: "#1a457f",
+    },
+    aboutMe: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
