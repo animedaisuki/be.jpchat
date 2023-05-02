@@ -32,6 +32,9 @@ exports.auth = async (req, res, next) => {
     req.email = user.email;
     req.avatar = user.avatar;
     req.voicePreference = user.voicePreference;
+    req.primaryColor = user.primaryColor;
+    req.accentColor = user.accentColor;
+    req.aboutMe = user.aboutMe;
     next();
   } catch (error) {
     console.log(error);

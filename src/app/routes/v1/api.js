@@ -9,6 +9,8 @@ const conversationController = require("../../controller/ConversationController"
 const messageController = require("../../controller/MessageController");
 const chatGptController = require("../../controller/ChatGptController");
 const ttsController = require("../../controller/TTSController");
+const UploadController = require("../../controller/UploadController");
+const { uploadAvatarMiddleWare } = require("../../services/upload");
 
 router.use(saasMiddleware.saas);
 router.post("/register", registerController.register);
@@ -16,6 +18,18 @@ router.post("/login", loginController.index);
 router.post("/user/auto-fetch", authMiddleware.auth, userController.autoFetch);
 router.get("/user/:userId", userController.getUserById);
 router.post("/user/voice-preference", userController.changeVoicePreference);
+router.post(
+  "/user/change-preview",
+  authMiddleware.auth,
+  userController.changePreview
+);
+
+router.post(
+  "/upload/avatar",
+  authMiddleware.auth,
+  uploadAvatarMiddleWare.single("avatar"),
+  UploadController.uploadAvatar
+);
 
 router.post(
   "/conversations/add",
