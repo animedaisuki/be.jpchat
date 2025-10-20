@@ -58,7 +58,7 @@ exports.stream = async (req, res) => {
 
     const newChatGptResponseMessage = new chatGptMessageModel({
       //hard code
-      senderId: "642f6590587a99d158680216",
+      senderId: config.aiUserId,
       conversation: conversationId,
       text: responseText,
     });
@@ -66,7 +66,7 @@ exports.stream = async (req, res) => {
 
     //hard code
     const chtholly = await User.getModel(req.dbConnetion)
-      .findById("642f6590587a99d158680216")
+      .findById(config.aiUserId)
       .select("-password");
 
     const subscriptionKey = config.subscription_key;
@@ -122,7 +122,7 @@ exports.show = async (req, res) => {
     const { userId } = req.params;
 
     //hard code
-    if (userId === "642f6590587a99d158680216") {
+    if (userId === config.aiUserId) {
       return res.status(status.UNPROCESSABLE_ENTITY).json({});
     }
 

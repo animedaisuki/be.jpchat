@@ -2,6 +2,7 @@ const status = require("http-status");
 const Conversation = require("../model/conversation");
 const User = require("../model/user");
 const errorHandler = require("../helper/errorHandler");
+const config = require("../config/app");
 
 exports.store = async (req, res) => {
   try {
@@ -32,7 +33,7 @@ exports.store = async (req, res) => {
     }
 
     //check if the receiver is AI (hard code)
-    if (receiverUserId === "642f6590587a99d158680216") {
+    if (receiverUserId === config.aiUserId) {
       return res
         .status(status.FORBIDDEN)
         .json({ error: errorHandler.ILLEGAL_FRIEND_REQUEST });

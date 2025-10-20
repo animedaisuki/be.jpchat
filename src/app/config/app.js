@@ -1,8 +1,7 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const DEFAULT_MONGODB_URL =
-  "mongodb+srv://amahane:5BtW1cJOfM2LGc9m@testmogoldb.o1jloky.mongodb.net/amahane?retryWrites=true&w=majority";
+const DEFAULT_MONGODB_URL = "mongodb://admin:123456@localhost:27017/7";
 
 module.exports = {
   port: process.env.PORT || 8080,
@@ -14,4 +13,5 @@ module.exports = {
   open_ai_key: process.env.OPENAI_API_KEY || "",
   subscription_key: process.env.SUBSCRIPTION_KEY || "",
   service_region: process.env.SERVICE_REGION || "",
+  aiUserId: process.env.AI_USER_ID || "68f334a6d5ff0d35a55ae779",
 };

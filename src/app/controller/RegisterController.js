@@ -43,13 +43,13 @@ exports.register = async (req, res) => {
         .status(status.FORBIDDEN)
         .json({ error: errorHandler.USERNAME_DUPLICATION });
     }
-    const verifyResult = await verify(config.hCaptchaSecret, token);
+    // const verifyResult = await verify(config.hCaptchaSecret, token);
 
-    if (!verifyResult.success) {
-      return res
-        .status(status.FORBIDDEN)
-        .json({ error: errorHandler.HCAPTCHA_DECLINED });
-    }
+    // if (!verifyResult.success) {
+    //   return res
+    //     .status(status.FORBIDDEN)
+    //     .json({ error: errorHandler.HCAPTCHA_DECLINED });
+    // }
 
     const defaultAvatars = [
       "https://amahane.s3.ap-northeast-1.amazonaws.com/users/defaultAvatar/char-gorou-small.png",
@@ -86,7 +86,7 @@ exports.register = async (req, res) => {
       req.dbConnetion
     );
     const newChatGptConversation = new chatGptConversationModel({
-      members: [user.id, "642f6590587a99d158680216"],
+      members: [user.id, config.aiUserId],
     });
     await newChatGptConversation.save();
 

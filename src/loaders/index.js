@@ -3,7 +3,7 @@ const serverLoader = require("./server");
 const mongooseLoader = require("./mongoose");
 
 exports.init = () => {
+  mongooseLoader();
   const app = expressLoader();
   serverLoader(app);
-  mongooseLoader();
 };
